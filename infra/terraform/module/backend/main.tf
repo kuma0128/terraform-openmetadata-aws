@@ -5,7 +5,7 @@ resource "aws_s3_bucket" "this" {
   }
 
   tags = {
-    Name      = "${var.name_prefix}-s3-${var.region_short_name}-tfstate"
+    Name = "${var.name_prefix}-s3-${var.region_short_name}-tfstate"
   }
 }
 
