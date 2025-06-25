@@ -1,6 +1,6 @@
 # terraform-openmetadata-ecs-aurora-assets
 
-This repository provides Terraform modules to deploy an ECS-based OpenMetadata service with an Aurora database. Terragrunt configurations are available under `infra/terragrunt` for the `aws`, `backend`, and `cicd` environments, enabling remote state management and easier orchestration. Please note the following when using this module:
+This repository provides Terraform modules to deploy an ECS-based OpenMetadata service with an Aurora database. Terragrunt configuration is centralized with `infra/terragrunt/terragrunt.hcl`, and the environment directories (`aws`, `backend`, `cicd`) simply include this root file for remote state and provider settings. Please note the following when using this module:
 
 ## Key Notes
 
