@@ -5,7 +5,7 @@ on:
 
 env:
   aws_default_region: "ap-northeast-1"
-  tf_version: 1.10.4
+  tf_version: 1.12.2
   deploy_env: ${{ github.event.inputs.environment || 'dev' }}
   ACTIONS_RUNNER_DEBUG: true
   ACTIONS_STEP_DEBUG: true
