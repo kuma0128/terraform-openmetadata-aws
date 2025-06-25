@@ -1,0 +1,58 @@
+name: terragrunt apply
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to apply"
+        required: false
+        default: dev
+
+env:
+  aws_default_region: ap-northeast-1
+  tg_version: v0.57.7
+  deploy_env: ${{ github.event.inputs.environment || 'dev' }}
+  ACTIONS_RUNNER_DEBUG: true
+  ACTIONS_STEP_DEBUG: true
+
+permissions:
+  id-token: write
+  pull-requests: write
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  terragrunt-apply:
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment || 'dev' }}
+    if: ${{ github.ref_name == 'main' || github.event.inputs.environment == 'dev' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4
+        with:
+          aws-region: ${{ env.aws_default_region }}
+          role-to-assume: ${{ secrets.AWS_GITHUB_ACTIONS_OIDC_ROLE_ARN }}
+          role-chaining: true
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2
+
+      - name: Install terragrunt
+        run: |
+          TG_URL="https://github.com/gruntwork-io/terragrunt/releases/download/${{ env.tg_version }}/terragrunt_linux_amd64"
+          wget -O terragrunt "$TG_URL"
+          chmod +x terragrunt
+          sudo mv terragrunt /usr/local/bin/
+
+      - name: Terragrunt apply
+        run: |
+          pushd infra/terragrunt/environment/${{ env.deploy_env }} >/dev/null
+            terragrunt run-all apply -auto-approve
+          popd >/dev/null
+
