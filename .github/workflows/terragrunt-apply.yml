@@ -40,6 +40,19 @@ jobs:
           role-to-assume: ${{ secrets.AWS_GITHUB_ACTIONS_OIDC_ROLE_ARN }}
           role-chaining: true
 
+<<<<<<< codex/変更-cicdをgruntwork-io/terragrunt-actionに参照変更
+=======
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v2
+
+      - name: Install terragrunt
+        run: |
+          TG_URL="https://github.com/gruntwork-io/terragrunt/releases/download/${{ env.tg_version }}/terragrunt_linux_amd64"
+          wget -O terragrunt "$TG_URL"
+          chmod +x terragrunt
+          sudo mv terragrunt /usr/local/bin/
+
+>>>>>>> main
       - name: Terragrunt apply
         uses: gruntwork-io/terragrunt-action@v2
         with:

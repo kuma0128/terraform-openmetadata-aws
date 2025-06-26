@@ -6,6 +6,10 @@ terraform {
   source = "../../../terraform/backend"
 }
 
+dependencies {
+  paths = ["../cicd"]
+}
+
 locals {
   pj_name              = "ethan"
   env                  = "dev"

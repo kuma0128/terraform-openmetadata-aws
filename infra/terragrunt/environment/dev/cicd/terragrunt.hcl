@@ -10,7 +10,7 @@ locals {
   pj_name           = "ethan"
   env               = "dev"
   region_short_name = "apne1"
-  repo_full_name    = "kuma0128/terraform-openmetadata-ecs-aurora-assets"
+  repo_full_name    = "kuma0128/terraform-openmetadata-aws-assets"
 }
 
 inputs = {
