@@ -11,7 +11,9 @@ on:
 env:
   aws_default_region: ap-northeast-1
   tg_version: v0.57.7
+  tf_version: 1.12.2
   deploy_env: ${{ github.event.inputs.environment || 'dev' }}
+  TF_PLUGIN_CACHE_DIR: ${{ github.workspace }}/.terraform.d/plugin-cache
   ACTIONS_RUNNER_DEBUG: true
   ACTIONS_STEP_DEBUG: true
 
@@ -40,19 +42,23 @@ jobs:
           role-to-assume: ${{ secrets.AWS_GITHUB_ACTIONS_OIDC_ROLE_ARN }}
           role-chaining: true
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v2
 
-      - name: Install terragrunt
-        run: |
-          TG_URL="https://github.com/gruntwork-io/terragrunt/releases/download/${{ env.tg_version }}/terragrunt_linux_amd64"
-          wget -O terragrunt "$TG_URL"
-          chmod +x terragrunt
-          sudo mv terragrunt /usr/local/bin/
+      - name: Create Terraform Plugin Cache Dir
+        run: mkdir -p ${{ env.TF_PLUGIN_CACHE_DIR }}
+
+      - name: Terraform Plugin Cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.TF_PLUGIN_CACHE_DIR }}
+          key: ${{ runner.os }}-terraform-plugin-cache-${{ hashFiles('**/.terraform.lock.hcl') }}
 
       - name: Terragrunt apply
-        run: |
-          pushd infra/terragrunt/environment/${{ env.deploy_env }} >/dev/null
-            terragrunt run-all apply -auto-approve
-          popd >/dev/null
+        uses: gruntwork-io/terragrunt-action@v2
+        env:
+          TF_PLUGIN_CACHE_DIR: ${{ env.TF_PLUGIN_CACHE_DIR }}
+        with:
+          tf_version: ${{ env.tf_version }}
+          tg_version: ${{ env.tg_version }}
+          tg_dir: infra/terragrunt/environment/${{ env.deploy_env }}
+          tg_command: run-all apply
 
