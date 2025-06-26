@@ -1,7 +1,7 @@
 #!/bin/bash
 # set -e
 
-ROOT_DIR="/mnt/c/project/openmetadata-assets/infra/terragrunt/module/module/aws/openmetadata/ecr/dockerfile"
+ROOT_DIR="/mnt/c/project/openmetadata-assets/infra/terragrunt/modules/aws/openmetadata/ecr/dockerfile"
 ELASTICSEARCH_TAG="8.11.4"
 OPENMETADATA_TAG="1.6.2-release"
 
