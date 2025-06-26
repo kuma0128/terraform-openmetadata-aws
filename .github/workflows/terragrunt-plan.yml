@@ -47,7 +47,6 @@ jobs:
         with:
           aws-region: ${{ env.aws_default_region }}
           role-to-assume: ${{ secrets.AWS_GITHUB_ACTIONS_OIDC_ROLE_ARN }}
-          role-chaining: true
 
       - name: Create Terraform Plugin Cache Dir
         run: mkdir -p ${{ env.TF_PLUGIN_CACHE_DIR }}
