@@ -10,7 +10,7 @@ on:
 
 env:
   aws_default_region: ap-northeast-1
-  tg_version: v0.57.7
+  tg_version: 0.82.0
   tf_version: 1.12.2
   deploy_env: ${{ github.event.inputs.environment || 'dev' }}
   TF_PLUGIN_CACHE_DIR: ${{ github.workspace }}/.terraform.d/plugin-cache
@@ -41,7 +41,6 @@ jobs:
           aws-region: ${{ env.aws_default_region }}
           role-to-assume: ${{ secrets.AWS_GITHUB_ACTIONS_OIDC_ROLE_ARN }}
           role-chaining: true
-
 
       - name: Create Terraform Plugin Cache Dir
         run: mkdir -p ${{ env.TF_PLUGIN_CACHE_DIR }}
