@@ -22,7 +22,7 @@ resource "aws_rds_cluster" "aurora" {
   engine_mode                         = "provisioned"
   database_name                       = "openmetadata"
   master_username                     = "openmetadata_admin"
-  master_password                     = jsondecode(ephemeral.aws_secretsmanager_secret_version.aurora.secret_string).password
+  master_password                     = jsondecode(data.aws_secretsmanager_secret_version.aurora.secret_string).password
   storage_encrypted                   = true
   kms_key_id                          = var.aurora_kms_key_arn
   iam_database_authentication_enabled = true
