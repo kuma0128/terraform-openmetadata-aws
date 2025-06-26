@@ -9,8 +9,9 @@ remote_state {
     bucket  = local.state_bucket
     key     = "ethan/${replace(path_relative_to_include(), "environment/", "")}/remote.tfstate"
     region  = local.aws_region
-    encrypt = true
-    skip_bucket_creation = true
+    encrypt                 = true
+    skip_bucket_creation    = false
+    skip_bucket_versioning  = false
   }
 }
 
