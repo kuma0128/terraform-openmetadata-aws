@@ -10,7 +10,7 @@ on:
 
 env:
   aws_default_region: ap-northeast-1
-  tg_version: v0.57.7
+  tg_version: 0.57.7
   deploy_env: ${{ github.event.inputs.environment || 'dev' }}
   ACTIONS_RUNNER_DEBUG: true
   ACTIONS_STEP_DEBUG: true
@@ -40,6 +40,8 @@ jobs:
           role-to-assume: ${{ secrets.AWS_GITHUB_ACTIONS_OIDC_ROLE_ARN }}
           role-chaining: true
 
+<<<<<<< codex/変更-cicdをgruntwork-io/terragrunt-actionに参照変更
+=======
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v2
 
@@ -50,9 +52,12 @@ jobs:
           chmod +x terragrunt
           sudo mv terragrunt /usr/local/bin/
 
+>>>>>>> main
       - name: Terragrunt apply
-        run: |
-          pushd infra/terragrunt/environment/${{ env.deploy_env }} >/dev/null
-            terragrunt run-all apply -auto-approve
-          popd >/dev/null
+        uses: gruntwork-io/terragrunt-action@v2
+        with:
+          tg_version: ${{ env.tg_version }}
+          tg_dir: infra/terragrunt/environment/${{ env.deploy_env }}
+          tg_command: 'run-all apply'
+          tg_comment: '0'
 
