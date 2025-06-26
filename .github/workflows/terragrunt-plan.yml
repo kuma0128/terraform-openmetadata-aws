@@ -67,7 +67,7 @@ jobs:
           tf_version: ${{ env.tf_version }}
           tg_version: ${{ env.tg_version }}
           tg_dir: infra/terragrunt/environment/${{ env.deploy_env }}
-          tg_command: run-all plan
+          tg_command: plan --all
           tg_comment: 0
           tg_add_approve: 0
 
