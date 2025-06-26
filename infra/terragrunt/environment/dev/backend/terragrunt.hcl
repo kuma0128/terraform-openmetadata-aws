@@ -3,7 +3,10 @@ include {
 }
 
 terraform {
-  source = "../../../module/backend"
+  # Copy the full module tree so Terraform has access to all nested modules.
+  # The `//backend` suffix ensures the backend module is used as the entry
+  # point while the rest of the directory is preserved in the cache.
+  source = "../../../module//backend"
 }
 
 dependencies {
