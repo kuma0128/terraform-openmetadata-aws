@@ -1,3 +1,7 @@
+terraform {
+  backend "s3" {}
+}
+
 module "backend" {
   source                     = "../module/backend"
   name_prefix                = "${var.pj_name}-${var.env}"

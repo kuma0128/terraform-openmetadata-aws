@@ -3,7 +3,7 @@ include {
 }
 
 terraform {
-  source = "../../../terraform/cicd"
+  source = "../../../module/cicd"
 }
 
 locals {
