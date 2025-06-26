@@ -5,6 +5,16 @@ on:
     branches: [ "main" ]
     types: [opened, synchronize, reopened]
   workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        type: choice
+        options:
+          - dev
+          - stg
+          - prd
+        default: dev
 
 env:
   aws_default_region: ap-northeast-1

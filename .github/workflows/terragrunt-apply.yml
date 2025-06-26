@@ -5,7 +5,12 @@ on:
     inputs:
       environment:
         description: "Environment to apply"
-        required: false
+        required: true
+        type: choice
+        options:
+          - dev
+          - stg
+          - prd
         default: dev
 
 env:
