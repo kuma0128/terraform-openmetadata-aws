@@ -6,6 +6,10 @@ terraform {
   source = "../../../terraform/aws"
 }
 
+dependencies {
+  paths = ["../backend"]
+}
+
 locals {
   pj_name           = "ethan"
   env               = "dev"
