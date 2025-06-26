@@ -3,14 +3,14 @@ terraform {
 }
 
 module "iam_github_oidc" {
-  source            = "../module/cicd/iam_github_oidc"
+  source            = "../../modules/cicd/iam_github_oidc"
   name_prefix       = "${var.pj_name}-${var.env}"
   region_short_name = var.region_short_name
   repo_full_name    = var.repo_full_name
 }
 
 module "network" {
-  source               = "../module/aws/network"
+  source               = "../../modules/aws/network"
   name_prefix          = "${var.pj_name}-${var.env}"
   region               = var.region
   region_short_name    = var.region_short_name
@@ -22,13 +22,13 @@ module "network" {
 }
 
 module "openmetadata_kms_key" {
-  source            = "../module/aws/openmetadata/kms_key"
+  source            = "../../modules/aws/openmetadata/kms_key"
   name_prefix       = "${var.pj_name}-${var.env}"
   region_short_name = var.region_short_name
 }
 
 module "openmetadata_s3" {
-  source                 = "../module/aws/openmetadata/s3"
+  source                 = "../../modules/aws/openmetadata/s3"
   name_prefix            = "${var.pj_name}-${var.env}"
   region_short_name      = var.region_short_name
   allowed_ip_list        = var.allowed_ip_list
@@ -37,14 +37,14 @@ module "openmetadata_s3" {
 }
 
 module "openmetadata_iam" {
-  source                    = "../module/aws/openmetadata/iam"
+  source                    = "../../modules/aws/openmetadata/iam"
   name_prefix               = "${var.pj_name}-${var.env}"
   region_short_name         = var.region_short_name
   docker_envfile_bucket_arn = module.openmetadata_s3.docker_envfile_bucket_arn
 }
 
 module "openmetadata_security_group" {
-  source            = "../module/aws/openmetadata/security_group"
+  source            = "../../modules/aws/openmetadata/security_group"
   name_prefix       = "${var.pj_name}-${var.env}"
   region_short_name = var.region_short_name
   allowed_ip_list   = var.allowed_ip_list
@@ -52,18 +52,18 @@ module "openmetadata_security_group" {
 }
 
 module "openmetadata_secretmanager" {
-  source            = "../module/aws/openmetadata/secrets_manager"
+  source            = "../../modules/aws/openmetadata/secrets_manager"
   name_prefix       = "${var.pj_name}-${var.env}"
   region_short_name = var.region_short_name
 }
 
 module "openmetadata_cloudwatch" {
-  source                = "../module/aws/openmetadata/cloudwatch"
+  source                = "../../modules/aws/openmetadata/cloudwatch"
   log_retention_in_days = var.log_retention_in_days
 }
 
 module "openmetadata_aurora" {
-  source                   = "../module/aws/openmetadata/aurora"
+  source                   = "../../modules/aws/openmetadata/aurora"
   name_prefix              = "${var.pj_name}-${var.env}"
   region_short_name        = var.region_short_name
   subnet_a_private_id      = module.network.subnet_a_private_id
@@ -74,7 +74,7 @@ module "openmetadata_aurora" {
 }
 
 module "openmetadata_ecr" {
-  source            = "../module/aws/openmetadata/ecr"
+  source            = "../../modules/aws/openmetadata/ecr"
   allowed_ip_list   = var.allowed_ip_list
   vpc_id            = module.network.vpc_id
   ecr_kms_key_arn   = module.openmetadata_kms_key.ecr_kms_key_arn
@@ -85,7 +85,7 @@ module "openmetadata_ecr" {
 }
 
 module "openmetadata_lb" {
-  source                            = "../module/aws/openmetadata/load_balancer"
+  source                            = "../../modules/aws/openmetadata/load_balancer"
   domain_name                       = var.domain_name
   name_prefix                       = "${var.pj_name}-${var.env}"
   region_short_name                 = var.region_short_name
@@ -96,7 +96,7 @@ module "openmetadata_lb" {
 }
 
 module "openmetadata_ecs" {
-  source                              = "../module/aws/openmetadata/ecs"
+  source                              = "../../modules/aws/openmetadata/ecs"
   region                              = var.region
   region_short_name                   = var.region_short_name
   name_prefix                         = "${var.pj_name}-${var.env}"
