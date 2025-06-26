@@ -3,5 +3,19 @@ include {
 }
 
 terraform {
-  source = "../../../../..//infra/terraform/environment/dev/cicd"
+  source = "../../../terraform/cicd"
+}
+
+locals {
+  pj_name           = "ethan"
+  env               = "dev"
+  region_short_name = "apne1"
+  repo_full_name    = "kuma0128/terraform-openmetadata-ecs-aurora-assets"
+}
+
+inputs = {
+  pj_name           = local.pj_name
+  env               = local.env
+  region_short_name = local.region_short_name
+  repo_full_name    = local.repo_full_name
 }

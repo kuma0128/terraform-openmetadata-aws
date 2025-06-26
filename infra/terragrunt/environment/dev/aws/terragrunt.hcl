@@ -3,7 +3,48 @@ include {
 }
 
 terraform {
-  # Include the entire Terraform directory so relative module
-  # paths work correctly when Terragrunt copies the code.
-  source = "../../../../..//infra/terraform/environment/dev/aws"
+  source = "../../../terraform/aws"
+}
+
+locals {
+  pj_name           = "ethan"
+  env               = "dev"
+  region            = "ap-northeast-1"
+  region_short_name = "apne1"
+  repo_full_name    = "kuma0128/terraform-openmetadata-ecs-aurora-assets"
+
+  allowed_ip_list = ["" ]
+
+  cidr_vpc             = ""
+  cidr_subnets_public  = ["", ""]
+  cidr_subnets_private = ["", ""]
+  az_a_name            = "ap-northeast-1a"
+  az_c_name            = "ap-northeast-1c"
+
+  domain_name            = ""
+  repository_list        = ["elasticsearch", "openmetadata/server", "openmetadata/ingestion"]
+  elasticsearch_tag      = "8.10.2"
+  openmetadata_tag       = "1.5.3"
+  ingestion_tag          = "1.5.3"
+  log_retention_in_days  = 30
+}
+
+inputs = {
+  pj_name              = local.pj_name
+  env                  = local.env
+  region               = local.region
+  region_short_name    = local.region_short_name
+  repo_full_name       = local.repo_full_name
+  allowed_ip_list      = local.allowed_ip_list
+  cidr_vpc             = local.cidr_vpc
+  cidr_subnets_public  = local.cidr_subnets_public
+  cidr_subnets_private = local.cidr_subnets_private
+  az_a_name            = local.az_a_name
+  az_c_name            = local.az_c_name
+  domain_name          = local.domain_name
+  repository_list      = local.repository_list
+  elasticsearch_tag    = local.elasticsearch_tag
+  openmetadata_tag     = local.openmetadata_tag
+  ingestion_tag        = local.ingestion_tag
+  log_retention_in_days = local.log_retention_in_days
 }
