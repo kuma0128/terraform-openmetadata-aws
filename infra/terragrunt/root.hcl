@@ -41,3 +41,15 @@ provider "http" {}
 provider "random" {}
 EOT
 }
+
+terraform {
+  before_hook "fmt" {
+    commands = ["plan", "apply"]
+    execute  = ["terraform", "fmt", "-check", "-recursive"]
+  }
+
+  before_hook "validate" {
+    commands = ["plan", "apply"]
+    execute  = ["terraform", "validate"]
+  }
+}
