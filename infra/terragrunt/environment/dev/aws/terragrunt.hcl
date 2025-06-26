@@ -34,6 +34,8 @@ locals {
   openmetadata_tag      = "1.5.3"
   ingestion_tag         = "1.5.3"
   log_retention_in_days = 30
+  backup_retention_period = 1
+  instance_count          = 1
 }
 
 inputs = {
@@ -54,4 +56,6 @@ inputs = {
   openmetadata_tag      = local.openmetadata_tag
   ingestion_tag         = local.ingestion_tag
   log_retention_in_days = local.log_retention_in_days
+  backup_retention_period = local.backup_retention_period
+  instance_count          = local.instance_count
 }

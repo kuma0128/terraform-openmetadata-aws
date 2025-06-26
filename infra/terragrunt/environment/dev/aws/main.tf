@@ -71,6 +71,8 @@ module "openmetadata_aurora" {
   aurora_kms_key_arn       = module.openmetadata_kms_key.aurora_kms_key_arn
   aurora_security_group_id = module.openmetadata_security_group.openmetaedata_aurora_security_group_id
   aurora_secret_name       = module.openmetadata_secretmanager.aurora_secret_name
+  backup_retention_period  = var.backup_retention_period
+  instance_count           = var.instance_count
 }
 
 module "openmetadata_ecr" {
