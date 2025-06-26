@@ -3,7 +3,7 @@ terraform {
 }
 
 module "backend" {
-  source                     = "../../modules/backend"
+  source                     = "../../../modules/backend"
   name_prefix                = "${var.pj_name}-${var.env}"
   region_short_name          = var.region_short_name
   allowed_ip_list            = var.allowed_ip_list

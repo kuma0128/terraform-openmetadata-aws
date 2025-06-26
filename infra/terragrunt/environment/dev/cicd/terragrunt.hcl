@@ -3,11 +3,11 @@ include {
 }
 
 terraform {
-  # Copy the entire module directory so that nested modules referenced by
-  # relative paths are available during execution. Using the `//cicd` suffix
-  # instructs Terragrunt/Terraform to run the `cicd` subdirectory while
-  # including the rest of the module files in the cache.
-  source = "."
+  # Copy the repo root so nested modules referenced by relative paths are
+  # available in Terragrunt's cache. The
+  # `//infra/terragrunt/environment/dev/cicd` suffix points to this directory as
+  # the module entry.
+  source = "${get_repo_root()}//infra/terragrunt/environment/dev/cicd"
 }
 
 locals {
