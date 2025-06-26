@@ -7,7 +7,7 @@ terraform {
   # relative paths are available during execution. Using the `//cicd` suffix
   # instructs Terragrunt/Terraform to run the `cicd` subdirectory while
   # including the rest of the module files in the cache.
-  source = "."
+  source = "../../..//environment/dev/cicd"
 }
 
 locals {
