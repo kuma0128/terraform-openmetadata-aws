@@ -1,3 +1,7 @@
+terraform {
+  backend "s3" {}
+}
+
 module "iam_github_oidc" {
   source            = "../module/aws/iam_github_oidc"
   name_prefix       = "${var.pj_name}-${var.env}"
