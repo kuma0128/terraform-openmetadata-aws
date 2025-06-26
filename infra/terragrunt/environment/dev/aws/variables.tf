@@ -92,3 +92,8 @@ variable "instance_count" {
   type        = number
   description = "Number of Aurora DB instances"
 }
+
+variable "desired_count" {
+  type        = number
+  description = "Number of ECS tasks to run"
+}

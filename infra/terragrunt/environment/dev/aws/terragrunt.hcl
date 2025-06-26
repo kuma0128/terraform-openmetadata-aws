@@ -36,6 +36,7 @@ locals {
   log_retention_in_days = 30
   backup_retention_period = 1
   instance_count          = 1
+  desired_count           = 1
 }
 
 inputs = {
@@ -58,4 +59,5 @@ inputs = {
   log_retention_in_days = local.log_retention_in_days
   backup_retention_period = local.backup_retention_period
   instance_count          = local.instance_count
+  desired_count           = local.desired_count
 }

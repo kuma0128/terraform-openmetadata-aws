@@ -77,8 +77,6 @@ module "openmetadata_aurora" {
 
 module "openmetadata_ecr" {
   source            = "../../../modules/aws/openmetadata/ecr"
-  allowed_ip_list   = var.allowed_ip_list
-  vpc_id            = module.network.vpc_id
   ecr_kms_key_arn   = module.openmetadata_kms_key.ecr_kms_key_arn
   repository_list   = var.repository_list
   elasticsearch_tag = var.elasticsearch_tag
@@ -102,6 +100,7 @@ module "openmetadata_ecs" {
   region                              = var.region
   region_short_name                   = var.region_short_name
   name_prefix                         = "${var.pj_name}-${var.env}"
+  desired_count                       = var.desired_count
   subnet_a_private_id                 = module.network.subnet_a_private_id
   subnet_c_private_id                 = module.network.subnet_c_private_id
   domain_name                         = var.domain_name
