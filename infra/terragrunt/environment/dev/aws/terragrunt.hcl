@@ -3,7 +3,10 @@ include {
 }
 
 terraform {
-  source = "../../../module/aws"
+  # Include the entire module directory so that submodules referenced using
+  # relative paths are available during Terraform execution. The `//aws`
+  # suffix selects the `aws` subdirectory as the entry point.
+  source = "../../../module//aws"
 }
 
 dependencies {
