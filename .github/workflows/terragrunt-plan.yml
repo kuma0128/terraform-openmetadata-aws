@@ -111,16 +111,14 @@ jobs:
           </details>
           EOF
 
-      - name: Comment plan on PR
+      - name: Post / update comment
         if: github.event_name == 'pull_request'
         env:
           GH_TOKEN: ${{ github.token }}
+        shell: bash
         run: |
+          # 直近コメントが無ければ exit 1 → || で新規投稿
           gh pr comment ${{ github.event.pull_request.number }} \
-            --body-file pr-comment.md --edit-last
-              -f body="$body"
-          else
-            echo "✏️  Updating existing sticky comment ($existing_id)"
-            gh api /repos/${{ github.repository }}/issues/comments/${existing_id} \
-              -X PATCH -F body="$body"
-          fi
+            --body-file pr-comment.md --edit-last \
+          || gh pr comment ${{ github.event.pull_request.number }} \
+            --body-file pr-comment.md
