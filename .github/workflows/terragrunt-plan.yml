@@ -72,10 +72,24 @@ jobs:
           tg_add_approve: 0
 
       - name: Save plan log
+        id: upload_plan_log 
         if: always()
-        run: echo "${{ steps.tg_plan.outputs.tg_action_output }}" > terragrunt-plan.log
+        run: |
+           cat <<'EOF' > terragrunt-plan.log
+           ${{ steps.tg_plan.outputs.tg_action_output }}
+           EOF
 
       - name: Comment plan result on PR
-        if: always() && github.event_name == 'pull_request'
-        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@d2ad0de260ae8b0235ce059e63f2949ba9e05943
+        with:
+          header: terragrunt-plan
+          message: |
+            ### :seedling: Terragrunt Plan (env: **${{ env.deploy_env }}**)
+            **Status**: ${{ steps.tg_plan.outcome }}
+            **Log**: [📦 terragrunt-plan log](${{ steps.upload_plan_log.outputs.artifact-url }})
+            ---
+            ```
+            ${{ steps.tg_plan.outputs.tg_action_output }}
+            ```
 
