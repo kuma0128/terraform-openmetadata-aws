@@ -74,7 +74,6 @@ jobs:
           tg_comment: 0
           tg_add_approve: 0
 
-      # ───────────── ログ保存 ─────────────
       - name: Save plan log
         if: always()
         shell: bash
@@ -82,7 +81,6 @@ jobs:
           raw='${{ steps.tg_plan.outputs.tg_action_output }}'
           printf '%s' "$raw" | sed 's/%0A/\n/g' > terragrunt-plan.log
 
-      # ───────────── Artifact アップロード ─────────────
       - name: Upload plan log artifact
         id: upload_plan_log
         if: always()
@@ -92,7 +90,6 @@ jobs:
           path: terragrunt-plan.log
           retention-days: 14
 
-      # ───────────── PR コメント本文生成 ─────────────
       - name: Build PR comment body
         if: always()
         shell: bash
@@ -114,30 +111,13 @@ jobs:
           </details>
           EOF
 
-      # ───────────── PR にスティッキーコメント ─────────────
-      - name: Sticky comment on PR (self-made)
+      - name: Comment plan on PR
         if: github.event_name == 'pull_request'
         env:
           GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-        shell: bash
         run: |
-          header="<!-- terragrunt-plan -->"
-          body="$(cat pr-comment.md)"
-
-          existing_id=$(gh api \
-            /repos/${{ github.repository }}/issues/${PR_NUMBER}/comments \
-            --jq "(.[]. | select(.body | startswith(\"$header\"))).id" | head -n1)
-
-          if [[ -z "$existing_id" ]]; then
-            echo "📩 Creating new sticky comment"
-            gh api /repos/${{ github.repository }}/issues/${PR_NUMBER}/comments \
-              -f body="$body"
-          else
-            echo "✏️  Updating existing sticky comment ($existing_id)"
-            gh api /repos/${{ github.repository }}/issues/comments/${existing_id} \
-              -X PATCH -F body="$body"
-          fi
+          gh pr comment ${{ github.event.pull_request.number }} \
+            --body-file pr-comment.md --edit-last
               -f body="$body"
           else
             echo "✏️  Updating existing sticky comment ($existing_id)"
