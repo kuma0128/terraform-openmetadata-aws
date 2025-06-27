@@ -79,8 +79,8 @@ jobs:
         if: always()
         shell: bash
         run: |
-          RAW="${{ steps.tg_plan.outputs.tg_action_output }}"
-          printf '%b' "${RAW//%0A/\\n}" > terragrunt-plan.log
+          raw='${{ steps.tg_plan.outputs.tg_action_output }}'
+          printf '%s' "$raw" | sed 's/%0A/\n/g' > terragrunt-plan.log
 
       # ───────────── Artifact アップロード ─────────────
       - name: Upload plan log artifact
