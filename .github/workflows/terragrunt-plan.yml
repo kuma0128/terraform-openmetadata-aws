@@ -83,7 +83,7 @@ EOF
         with:
           name: terragrunt-plan-${{ env.deploy_env }}-${{ github.sha }}
           path: terragrunt-plan.log
-          retention-days: 14
+          retention-days: 365
 
       - name: Comment plan result on PR
         if: github.event_name == 'pull_request'
