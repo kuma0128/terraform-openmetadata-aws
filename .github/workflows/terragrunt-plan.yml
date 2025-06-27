@@ -55,11 +55,10 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.TF_PLUGIN_CACHE_DIR }}
-          key: ${{ runner.os }}-terraform-plugin-cache-${{ hashFiles('**/*.tf') }}
+          key: ${{ runner.os }}-terraform-plugin-cache-${{ hashFiles('**/*.tf', '**/*.hcl') }}
 
       - name: Terragrunt plan
         id: tg_plan
-        continue-on-error: true
         uses: gruntwork-io/terragrunt-action@v2
         env:
           TF_PLUGIN_CACHE_DIR: ${{ env.TF_PLUGIN_CACHE_DIR }}
@@ -71,25 +70,45 @@ jobs:
           tg_comment: 0
           tg_add_approve: 0
 
+      # ──────────────── Save plan log ────────────────
       - name: Save plan log
-        id: upload_plan_log 
         if: always()
         run: |
-           cat <<'EOF' > terragrunt-plan.log
-           ${{ steps.tg_plan.outputs.tg_action_output }}
-           EOF
+          cat <<'EOF' > terragrunt-plan.log
+          ${{ steps.tg_plan.outputs.tg_action_output }}
+          EOF
 
+      # ──────────────── Upload artifact ────────────────
+      - name: Upload plan log artifact
+        id: upload_plan_log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: terragrunt-plan-${{ env.deploy_env }}-${{ github.sha }}
+          path: terragrunt-plan.log
+          retention-days: 365
+
+      # ──────────────── Build PR comment body ────────────────
+      - name: Build PR comment body
+        if: always()
+        run: |
+          cat <<'EOF' > pr-comment.md
+          ### :seedling: Terragrunt Plan (env: **${{ env.deploy_env }}**)
+          **Status**: ${{ steps.tg_plan.outcome }}
+          **Log**: [📦 terragrunt-plan log](${{ steps.upload_plan_log.outputs.artifact-url }})
+
+          <details><summary>Show plan output</summary>
+
+          ```terraform
+          ${{ steps.tg_plan.outputs.tg_action_output }}
+          ```
+          </details>
+          EOF
+
+      # ──────────────── Comment on PR ────────────────
       - name: Comment plan result on PR
         if: github.event_name == 'pull_request'
-        uses: marocchino/sticky-pull-request-comment@d2ad0de260ae8b0235ce059e63f2949ba9e05943
+        uses: marocchino/sticky-pull-request-comment@v2
         with:
           header: terragrunt-plan
-          message: |
-            ### :seedling: Terragrunt Plan (env: **${{ env.deploy_env }}**)
-            **Status**: ${{ steps.tg_plan.outcome }}
-            **Log**: [📦 terragrunt-plan log](${{ steps.upload_plan_log.outputs.artifact-url }})
-            ---
-            ```
-            ${{ steps.tg_plan.outputs.tg_action_output }}
-            ```
-
+          path: pr-comment.md
