@@ -10,7 +10,7 @@ terraform {
 }
 
 dependencies {
-  paths = ["../backend"]
+  paths = ["../backend", "../dns"]
 }
 
 locals {
@@ -28,7 +28,7 @@ locals {
   az_a_name            = "ap-northeast-1a"
   az_c_name            = "ap-northeast-1c"
 
-  domain_name           = ""
+  domain_name           = "ethan-example.com"
   repository_list       = ["elasticsearch", "openmetadata/server", "openmetadata/ingestion"]
   elasticsearch_tag     = "8.10.2"
   openmetadata_tag      = "1.5.3"
