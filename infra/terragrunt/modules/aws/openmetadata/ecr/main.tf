@@ -24,7 +24,7 @@ resource "terraform_data" "build_elasticsearch_image" {
       sh ${path.module}/dockerfile/elasticsearch/image_build.sh
       EOT
     environment = {
-      AWS_REGION     = data.aws_region.current.name
+      AWS_REGION     = data.aws_region.current.id
       AWS_ACCOUNT_ID = data.aws_caller_identity.current.account_id
       TAG            = var.elasticsearch_tag
     }
@@ -43,7 +43,7 @@ resource "terraform_data" "build_ingestion_image" {
       sh ${path.module}/dockerfile/ingestion/image_build.sh
       EOT
     environment = {
-      AWS_REGION     = data.aws_region.current.name
+      AWS_REGION     = data.aws_region.current.id
       AWS_ACCOUNT_ID = data.aws_caller_identity.current.account_id
       TAG            = var.ingestion_tag
     }
@@ -62,7 +62,7 @@ resource "terraform_data" "build_openmetadata_image" {
       sh ${path.module}/dockerfile/openmetadata/image_build.sh
       EOT
     environment = {
-      AWS_REGION     = data.aws_region.current.name
+      AWS_REGION     = data.aws_region.current.id
       AWS_ACCOUNT_ID = data.aws_caller_identity.current.account_id
       TAG            = var.openmetadata_tag
     }

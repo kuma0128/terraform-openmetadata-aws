@@ -3,7 +3,7 @@ resource "aws_iam_policy" "ecs_task_execution" {
   policy = templatefile(
     "${path.module}/iam_policy/ecs_task_exec.json.tpl",
     {
-      region        = data.aws_region.current.name
+      region        = data.aws_region.current.id
       account_id    = data.aws_caller_identity.current.account_id
       s3_bucket_arn = var.docker_envfile_bucket_arn
     }
@@ -25,7 +25,7 @@ resource "aws_iam_policy" "ecs_task" {
   policy = templatefile(
     "${path.module}/iam_policy/ecs_task.json.tpl",
     {
-      region        = data.aws_region.current.name
+      region        = data.aws_region.current.id
       account_id    = data.aws_caller_identity.current.account_id
       s3_bucket_arn = var.docker_envfile_bucket_arn
     }
@@ -37,7 +37,7 @@ resource "aws_iam_role" "ecs_task" {
   assume_role_policy = templatefile(
     "${path.module}/iam_assume_role_policy/ecs_task.json.tpl",
     {
-      region     = data.aws_region.current.name
+      region     = data.aws_region.current.id
       account_id = data.aws_caller_identity.current.account_id
     }
   )
