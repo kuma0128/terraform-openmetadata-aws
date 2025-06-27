@@ -18,7 +18,7 @@ on:
 
 env:
   aws_default_region: ap-northeast-1
-  tg_version: 0.82.0
+  tg_version: 0.82.2
   tf_version: 1.12.2
   deploy_env: ${{ github.event.inputs.environment || 'dev' }}
   TF_PLUGIN_CACHE_DIR: ${{ github.workspace }}/.terraform.d/plugin-cache
@@ -59,6 +59,7 @@ jobs:
 
       - name: Terragrunt plan
         id: tg_plan
+        continue-on-error: true
         uses: gruntwork-io/terragrunt-action@v2
         env:
           TF_PLUGIN_CACHE_DIR: ${{ env.TF_PLUGIN_CACHE_DIR }}
@@ -71,9 +72,10 @@ jobs:
           tg_add_approve: 0
 
       - name: Save plan log
+        if: always()
         run: echo "${{ steps.tg_plan.outputs.tg_action_output }}" > terragrunt-plan.log
 
       - name: Comment plan result on PR
-        if: github.event_name == 'pull_request'
+        if: always() && github.event_name == 'pull_request'
         uses: marocchino/sticky-pull-request-comment@v2
 
