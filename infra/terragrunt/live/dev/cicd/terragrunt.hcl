@@ -5,9 +5,9 @@ include {
 terraform {
   # Copy the repo root so nested modules referenced by relative paths are
   # available in Terragrunt's cache. The
-  # `//infra/terragrunt/environment/dev/cicd` suffix points to this directory as
+  # `//infra/terragrunt/live/dev/cicd` suffix points to this directory as
   # the module entry.
-  source = "${get_repo_root()}//infra/terragrunt/environment/dev/cicd"
+  source = "${get_repo_root()}//infra/terragrunt/live/dev/cicd"
 }
 
 locals {

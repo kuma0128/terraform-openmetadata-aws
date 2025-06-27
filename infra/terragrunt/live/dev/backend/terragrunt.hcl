@@ -4,9 +4,9 @@ include {
 
 terraform {
   # Copy the repo root so Terraform has access to all nested modules.
-  # The `//infra/terragrunt/environment/dev/backend` suffix ensures the backend
+  # The `//infra/terragrunt/live/dev/backend` suffix ensures the backend
   # directory is the entry point within the cache.
-  source = "${get_repo_root()}//infra/terragrunt/environment/dev/backend"
+  source = "${get_repo_root()}//infra/terragrunt/live/dev/backend"
 }
 
 dependencies {
