@@ -59,7 +59,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.TF_PLUGIN_CACHE_DIR }}
-          key: ${{ runner.os }}-terraform-plugin-cache-${{ hashFiles('**/*.tf', '**/*.hcl') }}
+          key: ${{ runner.os }}-terraform-plugin-cache-${{ hashFiles('**/*.tf') }}-${{ hashFiles('**/*.hcl') }}
 
       - name: Terragrunt plan
         id: tg_plan
