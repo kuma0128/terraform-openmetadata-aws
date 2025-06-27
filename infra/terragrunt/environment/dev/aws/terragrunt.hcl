@@ -15,6 +15,11 @@ dependencies {
 
 dependency "dns" {
   config_path = "../dns"
+  mock_outputs = {
+    cert_arn            = "mock-cert-arn"
+    openmetadata_zone_id = "mock-zone-id"
+  }
+  mock_outputs_allowed_terraform_commands = ["plan"]
 }
 
 locals {
