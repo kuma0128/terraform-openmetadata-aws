@@ -82,3 +82,18 @@ variable "log_retention_in_days" {
   type        = number
   description = "CloudWatch log retention"
 }
+
+variable "backup_retention_period" {
+  type        = number
+  description = "Aurora backup retention period"
+}
+
+variable "instance_count" {
+  type        = number
+  description = "Number of Aurora DB instances"
+}
+
+variable "desired_count" {
+  type        = number
+  description = "Number of ECS tasks to run"
+}
