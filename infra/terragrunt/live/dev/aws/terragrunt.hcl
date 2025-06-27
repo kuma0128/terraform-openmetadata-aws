@@ -4,9 +4,9 @@ include {
 
 terraform {
   # Include the repo root so nested modules referenced via relative paths are
-  # available in Terragrunt's cache. The `//infra/terragrunt/environment/dev/aws`
+  # available in Terragrunt's cache. The `//infra/terragrunt/live/dev/aws`
   # suffix selects this directory as the module entry point.
-  source = "${get_repo_root()}//infra/terragrunt/environment/dev/aws"
+  source = "${get_repo_root()}//infra/terragrunt/live/dev/aws"
 }
 
 dependencies {
