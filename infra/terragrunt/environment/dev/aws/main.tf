@@ -89,6 +89,8 @@ module "openmetadata_lb" {
   domain_name                       = var.domain_name
   name_prefix                       = "${var.pj_name}-${var.env}"
   region_short_name                 = var.region_short_name
+  cert_arn                          = var.cert_arn
+  route53_zone_id                   = var.route53_zone_id
   vpc_id                            = module.network.vpc_id
   subnet_a_public_id                = module.network.subnet_a_public_id
   subnet_c_public_id                = module.network.subnet_c_public_id

@@ -27,7 +27,7 @@ resource "aws_lb_listener" "from_https" {
   load_balancer_arn = aws_lb.this.arn
   port              = "443"
   protocol          = "HTTPS"
-  certificate_arn   = data.aws_acm_certificate.openmetadata_certificate.arn
+  certificate_arn   = var.cert_arn
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.to_openmetadata.arn
@@ -35,7 +35,7 @@ resource "aws_lb_listener" "from_https" {
 }
 
 resource "aws_route53_record" "alb_a_record" {
-  zone_id = data.aws_route53_zone.openmetadata_zone.zone_id
+  zone_id = var.route53_zone_id
   name    = var.domain_name
   type    = "A"
   alias {

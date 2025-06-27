@@ -10,7 +10,17 @@ terraform {
 }
 
 dependencies {
-  paths = ["../backend"]
+  paths = ["../backend", "../dns"]
+}
+
+dependency "dns" {
+  config_path = "../dns"
+  mock_outputs = {
+    cert_arn            = "arn:aws:acm:ap-northeast-1:000000000000:certificate/mock"
+    openmetadata_zone_id = "Z111111111111"
+    domain_name         = "ethan-example.com"
+  }
+  mock_outputs_allowed_terraform_commands = ["plan"]
 }
 
 locals {
@@ -20,7 +30,7 @@ locals {
   region_short_name = "apne1"
   repo_full_name    = "kuma0128/terraform-openmetadata-aws-assets"
 
-  allowed_ip_list = [""]
+  allowed_ip_list = ["192.0.2.0/24"]
 
   cidr_vpc             = "10.0.0.0/16"
   cidr_subnets_public  = ["10.0.0.0/24", "10.0.1.0/24"]
@@ -28,7 +38,6 @@ locals {
   az_a_name            = "ap-northeast-1a"
   az_c_name            = "ap-northeast-1c"
 
-  domain_name           = ""
   repository_list       = ["elasticsearch", "openmetadata/server", "openmetadata/ingestion"]
   elasticsearch_tag     = "8.10.2"
   openmetadata_tag      = "1.5.3"
@@ -51,7 +60,7 @@ inputs = {
   cidr_subnets_private  = local.cidr_subnets_private
   az_a_name             = local.az_a_name
   az_c_name             = local.az_c_name
-  domain_name           = local.domain_name
+  domain_name           = dependency.dns.outputs.domain_name
   repository_list       = local.repository_list
   elasticsearch_tag     = local.elasticsearch_tag
   openmetadata_tag      = local.openmetadata_tag
@@ -60,4 +69,6 @@ inputs = {
   backup_retention_period = local.backup_retention_period
   instance_count          = local.instance_count
   desired_count           = local.desired_count
+  cert_arn                = dependency.dns.outputs.cert_arn
+  route53_zone_id         = dependency.dns.outputs.openmetadata_zone_id
 }

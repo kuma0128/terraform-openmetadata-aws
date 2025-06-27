@@ -17,7 +17,7 @@ locals {
   pj_name                    = "ethan"
   env                        = "dev"
   region_short_name          = "apne1"
-  allowed_ip_list            = [""]
+  allowed_ip_list            = ["192.0.2.0/24"]
   github_actions_iam_role_id = []
   allowed_vpce_ids           = []
 }

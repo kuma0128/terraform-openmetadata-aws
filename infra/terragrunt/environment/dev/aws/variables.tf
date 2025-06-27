@@ -97,3 +97,13 @@ variable "desired_count" {
   type        = number
   description = "Number of ECS tasks to run"
 }
+
+variable "cert_arn" {
+  type        = string
+  description = "ARN of ACM certificate"
+}
+
+variable "route53_zone_id" {
+  type        = string
+  description = "ID of the Route53 zone"
+}

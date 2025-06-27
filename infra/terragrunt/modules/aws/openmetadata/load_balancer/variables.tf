@@ -13,6 +13,16 @@ variable "region_short_name" {
   description = "value of the region short name"
 }
 
+variable "cert_arn" {
+  type        = string
+  description = "ARN of ACM certificate"
+}
+
+variable "route53_zone_id" {
+  type        = string
+  description = "ID of the Route53 zone"
+}
+
 # child inputs
 variable "vpc_id" {
   type        = string
