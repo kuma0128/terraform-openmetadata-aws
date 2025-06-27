@@ -74,14 +74,15 @@ jobs:
           tg_comment: 0
           tg_add_approve: 0
 
-      # ──────────────── Save plan log ────────────────
+      # ───────────── ログ保存 ─────────────
       - name: Save plan log
         if: always()
+        shell: bash
         run: |
-          # %0A を実改行に変換して保存
-          printf '%b' "${{ steps.tg_plan.outputs.tg_action_output//%0A/\\n}}" > terragrunt-plan.log
+          RAW="${{ steps.tg_plan.outputs.tg_action_output }}"
+          printf '%b' "${RAW//%0A/\\n}" > terragrunt-plan.log
 
-      # ──────────────── Upload artifact ────────────────
+      # ───────────── Artifact アップロード ─────────────
       - name: Upload plan log artifact
         id: upload_plan_log
         if: always()
@@ -91,27 +92,29 @@ jobs:
           path: terragrunt-plan.log
           retention-days: 14
 
-      # ──────────────── Build PR comment body ────────────────
+      # ───────────── PR コメント本文生成 ─────────────
       - name: Build PR comment body
         if: always()
         shell: bash
         run: |
-          PLAN_DECODED=$(printf '%b' "${{ steps.tg_plan.outputs.tg_action_output//%0A/\\n}}")
-          {
-            echo "<!-- terragrunt-plan -->"
-            echo "### :seedling: Terragrunt Plan (env: **${{ env.deploy_env }}**)"
-            echo "**Status**: ${{ steps.tg_plan.outcome }}"
-            echo "**Log**: [📦 terragrunt-plan log](${{ steps.upload_plan_log.outputs.artifact-url }})"
-            echo
-            echo "<details><summary>Show plan output</summary>"
-            echo
-            echo '```terraform'
-            echo "$PLAN_DECODED"
-            echo '```'
-            echo "</details>"
-          } > pr-comment.md
+          RAW="${{ steps.tg_plan.outputs.tg_action_output }}"
+          PLAN_DECODED=$(printf '%b' "${RAW//%0A/\\n}")
 
-      # ──────────────── Sticky comment on PR (self-made) ────────────────
+          cat > pr-comment.md <<EOF
+          <!-- terragrunt-plan -->
+          ### :seedling: Terragrunt Plan (env: **${{ env.deploy_env }}**)
+          **Status**: ${{ steps.tg_plan.outcome }}
+          **Log**: [📦 terragrunt-plan log](${{ steps.upload_plan_log.outputs.artifact-url }})
+          
+          <details><summary>Show plan output</summary>
+          
+          \`\`\`terraform
+          $PLAN_DECODED
+          \`\`\`
+          </details>
+          EOF
+
+      # ───────────── PR にスティッキーコメント ─────────────
       - name: Sticky comment on PR (self-made)
         if: github.event_name == 'pull_request'
         env:
@@ -129,6 +132,12 @@ jobs:
           if [[ -z "$existing_id" ]]; then
             echo "📩 Creating new sticky comment"
             gh api /repos/${{ github.repository }}/issues/${PR_NUMBER}/comments \
+              -f body="$body"
+          else
+            echo "✏️  Updating existing sticky comment ($existing_id)"
+            gh api /repos/${{ github.repository }}/issues/comments/${existing_id} \
+              -X PATCH -F body="$body"
+          fi
               -f body="$body"
           else
             echo "✏️  Updating existing sticky comment ($existing_id)"
