@@ -97,7 +97,7 @@ jobs:
         if: always()
         shell: bash
         run: |
-          RAW="${{ steps.tg_plan.outputs.tg_action_output }}"
+          RAW='${{ steps.tg_plan.outputs.tg_action_output }}'
           PLAN_DECODED=$(printf '%b' "${RAW//%0A/\\n}")
 
           cat > pr-comment.md <<EOF
