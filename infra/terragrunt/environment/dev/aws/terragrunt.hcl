@@ -16,8 +16,8 @@ dependencies {
 dependency "dns" {
   config_path = "../dns"
   mock_outputs = {
-    cert_arn            = "mock-cert-arn"
-    openmetadata_zone_id = "mock-zone-id"
+    cert_arn            = "arn:aws:acm:ap-northeast-1:000000000000:certificate/mock"
+    openmetadata_zone_id = "Z111111111111"
   }
   mock_outputs_allowed_terraform_commands = ["plan"]
 }
