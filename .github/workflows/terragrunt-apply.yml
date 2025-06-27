@@ -15,7 +15,7 @@ on:
 
 env:
   aws_default_region: ap-northeast-1
-  tg_version: 0.82.0
+  tg_version: 0.82.2
   tf_version: 1.12.2
   deploy_env: ${{ github.event.inputs.environment || 'dev' }}
   TF_PLUGIN_CACHE_DIR: ${{ github.workspace }}/.terraform.d/plugin-cache
