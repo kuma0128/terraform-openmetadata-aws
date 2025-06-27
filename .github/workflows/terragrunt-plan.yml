@@ -18,7 +18,7 @@ on:
 
 env:
   aws_default_region: ap-northeast-1
-  tg_version: 0.82.0
+  tg_version: 0.82.2
   tf_version: 1.12.2
   deploy_env: ${{ github.event.inputs.environment || 'dev' }}
   TF_PLUGIN_CACHE_DIR: ${{ github.workspace }}/.terraform.d/plugin-cache
@@ -71,7 +71,8 @@ jobs:
           tg_add_approve: 0
 
       - name: Save plan log
-        run: echo "${{ steps.tg_plan.outputs.tg_action_output }}" > terragrunt-plan.log
+        run: |
+          printf '%s' "${{ steps.tg_plan.outputs.tg_action_output }}" > terragrunt-plan.log
 
       - name: Comment plan result on PR
         if: github.event_name == 'pull_request'
