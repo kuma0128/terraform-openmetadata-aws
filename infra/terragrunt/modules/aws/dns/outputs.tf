@@ -8,3 +8,8 @@ output "cert_arn" {
   description = "ARN of ACM certificate"
 }
 
+output "domain_name" {
+  value       = var.domain_name
+  description = "Primary domain name"
+}
+

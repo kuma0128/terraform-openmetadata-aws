@@ -18,6 +18,7 @@ dependency "dns" {
   mock_outputs = {
     cert_arn            = "arn:aws:acm:ap-northeast-1:000000000000:certificate/mock"
     openmetadata_zone_id = "Z111111111111"
+    domain_name         = "ethan-example.com"
   }
   mock_outputs_allowed_terraform_commands = ["plan"]
 }
@@ -37,7 +38,6 @@ locals {
   az_a_name            = "ap-northeast-1a"
   az_c_name            = "ap-northeast-1c"
 
-  domain_name           = "ethan-example.com"
   repository_list       = ["elasticsearch", "openmetadata/server", "openmetadata/ingestion"]
   elasticsearch_tag     = "8.10.2"
   openmetadata_tag      = "1.5.3"
@@ -60,7 +60,7 @@ inputs = {
   cidr_subnets_private  = local.cidr_subnets_private
   az_a_name             = local.az_a_name
   az_c_name             = local.az_c_name
-  domain_name           = local.domain_name
+  domain_name           = dependency.dns.outputs.domain_name
   repository_list       = local.repository_list
   elasticsearch_tag     = local.elasticsearch_tag
   openmetadata_tag      = local.openmetadata_tag

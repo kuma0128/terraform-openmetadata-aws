@@ -20,3 +20,7 @@ output "openmetadata_zone_id" {
 output "cert_arn" {
   value = module.dns.cert_arn
 }
+
+output "domain_name" {
+  value = module.dns.domain_name
+}
