@@ -28,31 +28,6 @@ variable "allowed_ip_list" {
   description = "Allowed IP ranges"
 }
 
-variable "cidr_vpc" {
-  type        = string
-  description = "CIDR block for VPC"
-}
-
-variable "cidr_subnets_public" {
-  type        = list(string)
-  description = "CIDR blocks for public subnets"
-}
-
-variable "cidr_subnets_private" {
-  type        = list(string)
-  description = "CIDR blocks for private subnets"
-}
-
-variable "az_a_name" {
-  type        = string
-  description = "Availability zone A name"
-}
-
-variable "az_c_name" {
-  type        = string
-  description = "Availability zone C name"
-}
-
 variable "domain_name" {
   type        = string
   description = "Domain name for load balancer"
@@ -106,4 +81,34 @@ variable "cert_arn" {
 variable "route53_zone_id" {
   type        = string
   description = "ID of the Route53 zone"
+}
+
+variable "vpc_id" {
+  type        = string
+  description = "VPC ID from network"
+}
+
+variable "subnet_a_public_id" {
+  type        = string
+  description = "Public subnet A ID"
+}
+
+variable "subnet_c_public_id" {
+  type        = string
+  description = "Public subnet C ID"
+}
+
+variable "subnet_a_private_id" {
+  type        = string
+  description = "Private subnet A ID"
+}
+
+variable "subnet_c_private_id" {
+  type        = string
+  description = "Private subnet C ID"
+}
+
+variable "s3_gateway_endpoint_id" {
+  type        = string
+  description = "Gateway endpoint ID for S3"
 }

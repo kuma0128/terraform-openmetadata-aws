@@ -2,25 +2,6 @@ terraform {
   backend "s3" {}
 }
 
-module "iam_github_oidc" {
-  source            = "../../../modules/cicd/iam_github_oidc"
-  name_prefix       = "${var.pj_name}-${var.env}"
-  region_short_name = var.region_short_name
-  repo_full_name    = var.repo_full_name
-}
-
-module "network" {
-  source               = "../../../modules/aws/network"
-  name_prefix          = "${var.pj_name}-${var.env}"
-  region               = var.region
-  region_short_name    = var.region_short_name
-  az_a_name            = var.az_a_name
-  az_c_name            = var.az_c_name
-  cidr_vpc             = var.cidr_vpc
-  cidr_subnets_public  = var.cidr_subnets_public
-  cidr_subnets_private = var.cidr_subnets_private
-}
-
 module "openmetadata_kms_key" {
   source            = "../../../modules/aws/openmetadata/kms_key"
   name_prefix       = "${var.pj_name}-${var.env}"
@@ -32,7 +13,7 @@ module "openmetadata_s3" {
   name_prefix            = "${var.pj_name}-${var.env}"
   region_short_name      = var.region_short_name
   allowed_ip_list        = var.allowed_ip_list
-  s3_gateway_endpoint_id = module.network.s3_gateway_endpoint_id
+  s3_gateway_endpoint_id = var.s3_gateway_endpoint_id
   s3_kms_key_arn         = module.openmetadata_kms_key.s3_kms_key_arn
 }
 
@@ -48,7 +29,7 @@ module "openmetadata_security_group" {
   name_prefix       = "${var.pj_name}-${var.env}"
   region_short_name = var.region_short_name
   allowed_ip_list   = var.allowed_ip_list
-  vpc_id            = module.network.vpc_id
+  vpc_id            = var.vpc_id
 }
 
 module "openmetadata_secretmanager" {
@@ -66,8 +47,8 @@ module "openmetadata_aurora" {
   source                   = "../../../modules/aws/openmetadata/aurora"
   name_prefix              = "${var.pj_name}-${var.env}"
   region_short_name        = var.region_short_name
-  subnet_a_private_id      = module.network.subnet_a_private_id
-  subnet_c_private_id      = module.network.subnet_c_private_id
+  subnet_a_private_id      = var.subnet_a_private_id
+  subnet_c_private_id      = var.subnet_c_private_id
   aurora_kms_key_arn       = module.openmetadata_kms_key.aurora_kms_key_arn
   aurora_security_group_id = module.openmetadata_security_group.openmetaedata_aurora_security_group_id
   aurora_password          = module.openmetadata_secretmanager.aurora_password
@@ -91,9 +72,9 @@ module "openmetadata_lb" {
   region_short_name                 = var.region_short_name
   cert_arn                          = var.cert_arn
   route53_zone_id                   = var.route53_zone_id
-  vpc_id                            = module.network.vpc_id
-  subnet_a_public_id                = module.network.subnet_a_public_id
-  subnet_c_public_id                = module.network.subnet_c_public_id
+  vpc_id                            = var.vpc_id
+  subnet_a_public_id                = var.subnet_a_public_id
+  subnet_c_public_id                = var.subnet_c_public_id
   openmetadata_lb_security_group_id = module.openmetadata_security_group.openmetadata_lb_security_group_id
 }
 
@@ -103,8 +84,8 @@ module "openmetadata_ecs" {
   region_short_name                   = var.region_short_name
   name_prefix                         = "${var.pj_name}-${var.env}"
   desired_count                       = var.desired_count
-  subnet_a_private_id                 = module.network.subnet_a_private_id
-  subnet_c_private_id                 = module.network.subnet_c_private_id
+  subnet_a_private_id                 = var.subnet_a_private_id
+  subnet_c_private_id                 = var.subnet_c_private_id
   domain_name                         = var.domain_name
   elasticsearch_tag                   = var.elasticsearch_tag
   openmetadata_tag                    = var.openmetadata_tag

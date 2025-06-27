@@ -3,14 +3,11 @@ include {
 }
 
 terraform {
-  # Include the repo root so nested modules referenced via relative paths are
-  # available in Terragrunt's cache. The `//infra/terragrunt/environment/dev/aws`
-  # suffix selects this directory as the module entry point.
-  source = "${get_repo_root()}//infra/terragrunt/environment/dev/aws"
+  source = "${get_repo_root()}//infra/terragrunt/environment/dev/openmetadata"
 }
 
 dependencies {
-  paths = ["../backend", "../dns"]
+  paths = ["../dns", "../network"]
 }
 
 dependency "dns" {
@@ -23,6 +20,19 @@ dependency "dns" {
   mock_outputs_allowed_terraform_commands = ["plan"]
 }
 
+dependency "network" {
+  config_path = "../network"
+  mock_outputs = {
+    vpc_id               = "vpc-12345678"
+    subnet_a_public_id   = "subnet-11111111"
+    subnet_c_public_id   = "subnet-22222222"
+    subnet_a_private_id  = "subnet-33333333"
+    subnet_c_private_id  = "subnet-44444444"
+    s3_gateway_endpoint_id = "vpce-111111111111"
+  }
+  mock_outputs_allowed_terraform_commands = ["plan"]
+}
+
 locals {
   pj_name           = "ethan"
   env               = "dev"
@@ -31,12 +41,6 @@ locals {
   repo_full_name    = "kuma0128/terraform-openmetadata-aws-assets"
 
   allowed_ip_list = ["192.0.2.0/24"]
-
-  cidr_vpc             = "10.0.0.0/16"
-  cidr_subnets_public  = ["10.0.0.0/24", "10.0.1.0/24"]
-  cidr_subnets_private = ["10.0.10.0/24", "10.0.11.0/24"]
-  az_a_name            = "ap-northeast-1a"
-  az_c_name            = "ap-northeast-1c"
 
   repository_list       = ["elasticsearch", "openmetadata/server", "openmetadata/ingestion"]
   elasticsearch_tag     = "8.10.2"
@@ -55,11 +59,6 @@ inputs = {
   region_short_name     = local.region_short_name
   repo_full_name        = local.repo_full_name
   allowed_ip_list       = local.allowed_ip_list
-  cidr_vpc              = local.cidr_vpc
-  cidr_subnets_public   = local.cidr_subnets_public
-  cidr_subnets_private  = local.cidr_subnets_private
-  az_a_name             = local.az_a_name
-  az_c_name             = local.az_c_name
   domain_name           = dependency.dns.outputs.domain_name
   repository_list       = local.repository_list
   elasticsearch_tag     = local.elasticsearch_tag
@@ -71,4 +70,10 @@ inputs = {
   desired_count           = local.desired_count
   cert_arn                = dependency.dns.outputs.cert_arn
   route53_zone_id         = dependency.dns.outputs.openmetadata_zone_id
+  vpc_id                  = dependency.network.outputs.vpc_id
+  subnet_a_public_id      = dependency.network.outputs.subnet_a_public_id
+  subnet_c_public_id      = dependency.network.outputs.subnet_c_public_id
+  subnet_a_private_id     = dependency.network.outputs.subnet_a_private_id
+  subnet_c_private_id     = dependency.network.outputs.subnet_c_private_id
+  s3_gateway_endpoint_id  = dependency.network.outputs.s3_gateway_endpoint_id
 }
