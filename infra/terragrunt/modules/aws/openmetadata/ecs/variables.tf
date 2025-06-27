@@ -69,9 +69,25 @@ variable "ecs_task_execution_role_arn" {
   description = "value of the ecs task execution role arn"
 }
 
-variable "openmetadata_secret_name" {
+
+variable "elasticsearch_password" {
   type        = string
-  description = "value of the openmetadata secret name"
+  description = "password for the Elasticsearch container"
+}
+
+variable "openmetadata_db_password" {
+  type        = string
+  description = "password for the OpenMetadata database"
+}
+
+variable "airflow_db_password" {
+  type        = string
+  description = "password for the Airflow database"
+}
+
+variable "airflow_admin_password" {
+  type        = string
+  description = "password for the Airflow admin user"
 }
 
 variable "aurora_cluster_endpoint" {

@@ -70,7 +70,7 @@ module "openmetadata_aurora" {
   subnet_c_private_id      = module.network.subnet_c_private_id
   aurora_kms_key_arn       = module.openmetadata_kms_key.aurora_kms_key_arn
   aurora_security_group_id = module.openmetadata_security_group.openmetaedata_aurora_security_group_id
-  aurora_secret_name       = module.openmetadata_secretmanager.aurora_secret_name
+  aurora_password          = module.openmetadata_secretmanager.aurora_password
   backup_retention_period  = var.backup_retention_period
   instance_count           = var.instance_count
 }
@@ -109,7 +109,10 @@ module "openmetadata_ecs" {
   ingestion_tag                       = var.ingestion_tag
   ecs_task_role_arn                   = module.openmetadata_iam.ecs_task_role_arn
   ecs_task_execution_role_arn         = module.openmetadata_iam.ecs_task_execution_role_arn
-  openmetadata_secret_name            = module.openmetadata_secretmanager.openmetadata_secret_name
+  elasticsearch_password              = module.openmetadata_secretmanager.elasticsearch_password
+  openmetadata_db_password            = module.openmetadata_secretmanager.openmetadata_db_password
+  airflow_db_password                 = module.openmetadata_secretmanager.airflow_db_password
+  airflow_admin_password              = module.openmetadata_secretmanager.airflow_admin_password
   aurora_cluster_endpoint             = module.openmetadata_aurora.aurora_cluster_endpoint
   docker_envfile_bucket_arn           = module.openmetadata_s3.docker_envfile_bucket_arn
   elastic_search_log_group_name       = module.openmetadata_cloudwatch.elastic_search_log_group_name

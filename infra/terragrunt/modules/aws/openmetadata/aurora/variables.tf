@@ -28,10 +28,6 @@ variable "aurora_security_group_id" {
   description = "value of the aurora security group id"
 }
 
-variable "aurora_secret_name" {
-  type        = string
-  description = "value of the aurora secret name"
-}
 
 variable "backup_retention_period" {
   type        = number
@@ -41,4 +37,9 @@ variable "backup_retention_period" {
 variable "instance_count" {
   type        = number
   description = "value of the instance count"
+}
+
+variable "aurora_password" {
+  type        = string
+  description = "password for the Aurora admin user"
 }

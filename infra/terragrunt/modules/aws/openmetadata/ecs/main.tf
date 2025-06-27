@@ -43,7 +43,7 @@ resource "aws_ecs_task_definition" "openmetadata" {
       environment = [
         {
           name  = "ELASTIC_PASSWORD"
-          value = jsondecode(data.aws_secretsmanager_secret_version.openmetadata.secret_string)["elasticsearch"]
+          value = var.elasticsearch_password
         }
       ]
 
@@ -95,15 +95,15 @@ resource "aws_ecs_task_definition" "openmetadata" {
       environment = [
         {
           name  = "DB_USER_PASSWORD"
-          value = jsondecode(data.aws_secretsmanager_secret_version.openmetadata.secret_string)["openmetadata_db"]
+          value = var.openmetadata_db_password
         },
         {
           name  = "ELASTICSEARCH_PASSWORD"
-          value = jsondecode(data.aws_secretsmanager_secret_version.openmetadata.secret_string)["elasticsearch"]
+          value = var.elasticsearch_password
         },
         {
           name  = "AIRFLOW_PASSWORD"
-          value = jsondecode(data.aws_secretsmanager_secret_version.openmetadata.secret_string)["airflow_admin"]
+          value = var.airflow_admin_password
         },
         {
           name  = "JWT_ISSUER"
@@ -146,15 +146,15 @@ resource "aws_ecs_task_definition" "openmetadata" {
       environment = [
         {
           name  = "DB_USER_PASSWORD"
-          value = jsondecode(data.aws_secretsmanager_secret_version.openmetadata.secret_string)["openmetadata_db"]
+          value = var.openmetadata_db_password
         },
         {
           name  = "ELASTICSEARCH_PASSWORD"
-          value = jsondecode(data.aws_secretsmanager_secret_version.openmetadata.secret_string)["elasticsearch"]
+          value = var.elasticsearch_password
         },
         {
           name  = "AIRFLOW_PASSWORD"
-          value = jsondecode(data.aws_secretsmanager_secret_version.openmetadata.secret_string)["airflow_admin"]
+          value = var.airflow_admin_password
         },
         {
           name  = "JWT_ISSUER"
@@ -219,11 +219,11 @@ resource "aws_ecs_task_definition" "openmetadata" {
       environment = [
         {
           name  = "AIRFLOW_ADMIN_PASSWORD"
-          value = jsondecode(data.aws_secretsmanager_secret_version.openmetadata.secret_string)["airflow_admin"]
+          value = var.airflow_admin_password
         },
         {
           name  = "DB_PASSWORD"
-          value = jsondecode(data.aws_secretsmanager_secret_version.openmetadata.secret_string)["airflow_db"]
+          value = var.airflow_db_password
         },
         {
           name  = "DB_HOST"
