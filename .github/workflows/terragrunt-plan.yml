@@ -59,7 +59,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.TF_PLUGIN_CACHE_DIR }}
-          key: ${{ runner.os }}-terraform-plugin-cache-${{ hashFiles('**/*.tf', '**/*.hcl') }}
+          key: ${{ runner.os }}-terraform-plugin-cache-${{ github.sha }}
 
       - name: Terragrunt plan
         id: tg_plan
@@ -74,14 +74,13 @@ jobs:
           tg_comment: 0
           tg_add_approve: 0
 
-      # ──────────────── Save plan log ────────────────
       - name: Save plan log
         if: always()
+        shell: bash
         run: |
-          # %0A を実改行に変換して保存
-          printf '%b' "${{ steps.tg_plan.outputs.tg_action_output//%0A/\\n}}" > terragrunt-plan.log
+          raw='${{ steps.tg_plan.outputs.tg_action_output }}'
+          printf '%s' "$raw" | sed 's/%0A/\n/g' > terragrunt-plan.log
 
-      # ──────────────── Upload artifact ────────────────
       - name: Upload plan log artifact
         id: upload_plan_log
         if: always()
@@ -91,29 +90,35 @@ jobs:
           path: terragrunt-plan.log
           retention-days: 14
 
-      # ──────────────── Build PR comment body ────────────────
       - name: Build PR comment body
         if: always()
         shell: bash
         run: |
-          PLAN_DECODED=$(printf '%b' "${{ steps.tg_plan.outputs.tg_action_output//%0A/\\n}}")
-          {
-            echo "### :seedling: Terragrunt Plan (env: **${{ env.deploy_env }}**)"
-            echo "**Status**: ${{ steps.tg_plan.outcome }}"
-            echo "**Log**: [📦 terragrunt-plan log](${{ steps.upload_plan_log.outputs.artifact-url }})"
-            echo
-            echo "<details><summary>Show plan output</summary>"
-            echo
-            echo '```terraform'
-            echo "$PLAN_DECODED"
-            echo '```'
-            echo "</details>"
-          } > pr-comment.md
+          RAW='${{ steps.tg_plan.outputs.tg_action_output }}'
+          PLAN_DECODED=$(printf '%b' "${RAW//%0A/\\n}")
 
-      # ──────────────── Comment on PR ────────────────
-      - name: Comment plan result on PR
+          cat > pr-comment.md <<EOF
+          <!-- terragrunt-plan -->
+          ### :seedling: Terragrunt Plan (env: **${{ env.deploy_env }}**)
+          **Status**: ${{ steps.tg_plan.outcome }}
+          **Log**: [📦 terragrunt-plan log](${{ steps.upload_plan_log.outputs.artifact-url }})
+          
+          <details><summary>Show plan output</summary>
+          
+          \`\`\`terraform
+          $PLAN_DECODED
+          \`\`\`
+          </details>
+          EOF
+
+      - name: Post / update comment
         if: github.event_name == 'pull_request'
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          header: terragrunt-plan
-          path: pr-comment.md
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          # 直近コメントが無ければ exit 1 → || で新規投稿
+          gh pr comment ${{ github.event.pull_request.number }} \
+            --body-file pr-comment.md --edit-last \
+          || gh pr comment ${{ github.event.pull_request.number }} \
+            --body-file pr-comment.md
