@@ -12,3 +12,11 @@ module "dns" {
   dev_ns_records        = var.dev_ns_records
   stg_ns_records        = var.stg_ns_records
 }
+
+output "openmetadata_zone_id" {
+  value = module.dns.openmetadata_zone_id
+}
+
+output "cert_arn" {
+  value = module.dns.cert_arn
+}

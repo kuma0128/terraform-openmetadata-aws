@@ -13,6 +13,10 @@ dependencies {
   paths = ["../backend", "../dns"]
 }
 
+dependency "dns" {
+  config_path = "../dns"
+}
+
 locals {
   pj_name           = "ethan"
   env               = "dev"
@@ -60,4 +64,6 @@ inputs = {
   backup_retention_period = local.backup_retention_period
   instance_count          = local.instance_count
   desired_count           = local.desired_count
+  cert_arn                = dependency.dns.outputs.cert_arn
+  route53_zone_id         = dependency.dns.outputs.openmetadata_zone_id
 }
