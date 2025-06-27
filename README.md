@@ -7,6 +7,15 @@ This repository provides Terraform modules to deploy an ECS-based OpenMetadata s
 - Separate the creation of ACM (AWS Certificate Manager) and Route 53 resources into a different Terraform state file to avoid coupling them tightly with the main infrastructure.
 - A dedicated `dns` module provisions Route 53 hosted zones, query logging, and ACM certificates before the main AWS stack.
 - DNS outputs (domain name, ACM certificate ARN, and zone ID) are passed to the load balancer module via Terragrunt dependencies instead of Terraform data sources.
+- The `dns` stack should be planned and applied before the main `aws` stack so that the certificate and zone outputs are available.
+
+## Running a Plan
+
+1. Install **Terraform**, **TFLint**, and **Terragrunt** on your system.
+2. Export AWS credentials (Access Key, Secret Key, and Session Token) for the target account.
+3. Run `terragrunt plan` inside `infra/terragrunt/environment/dev/dns` followed by `infra/terragrunt/environment/dev/aws`.
+
+This ensures the DNS resources are created first and their outputs are available to the AWS modules.
 - Based on my experience, keeping modules as granular as possible is recommended, especially for disaster recovery (DR) scenarios.
 - **Warning**: This module does not implement non-functional requirements such as comprehensive operational support or robust security measures. Therefore, **it is not suitable for production environments without significant modifications**.
 
