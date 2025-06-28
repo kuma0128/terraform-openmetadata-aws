@@ -3,7 +3,7 @@ include {
 }
 
 terraform {
-  source = "${get_repo_root()}//infra/terragrunt/environment/dev/network"
+  source = "${get_repo_root()}//infra/terragrunt/live/dev/network"
 }
 
 locals {

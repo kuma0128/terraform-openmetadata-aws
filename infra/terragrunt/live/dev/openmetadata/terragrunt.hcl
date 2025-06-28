@@ -3,7 +3,7 @@ include {
 }
 
 terraform {
-  source = "${get_repo_root()}//infra/terragrunt/environment/dev/openmetadata"
+  source = "${get_repo_root()}//infra/terragrunt/live/dev/openmetadata"
 }
 
 dependencies {

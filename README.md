@@ -1,6 +1,6 @@
 # terraform-openmetadata-aws-assets
 
-This repository provides Terraform modules to deploy an ECS-based OpenMetadata service with an Aurora database. Terragrunt configuration is centralized with `infra/terragrunt/root.hcl`, and the environment directories (`dns`, `network`, `openmetadata`, `backend`, `cicd`) simply include this root file for remote state and provider settings. Please note the following when using this module:
+This repository provides Terraform modules to deploy an ECS-based OpenMetadata service with an Aurora database. Terragrunt configuration is centralized with `infra/terragrunt/root.hcl`, and the stack directories under `infra/terragrunt/live` (`dns`, `network`, `openmetadata`, `backend`, `cicd`) simply include this root file for remote state and provider settings. Please note the following when using this module:
 
 ## Key Notes
 
@@ -13,7 +13,7 @@ This repository provides Terraform modules to deploy an ECS-based OpenMetadata s
 
 1. Install **Terraform**, **TFLint**, and **Terragrunt** on your system.
 2. Export AWS credentials (Access Key, Secret Key, and Session Token) for the target account.
-3. Run `terragrunt plan` inside `infra/terragrunt/environment/dev/dns`, then `infra/terragrunt/environment/dev/network`, and finally `infra/terragrunt/environment/dev/openmetadata`.
+3. Run `terragrunt plan` inside `infra/terragrunt/live/dev/dns`, then `infra/terragrunt/live/dev/network`, and finally `infra/terragrunt/live/dev/openmetadata`.
 
 This ensures the DNS resources are created first and their outputs are available to the AWS modules.
 - Based on my experience, keeping modules as granular as possible is recommended, especially for disaster recovery (DR) scenarios.
