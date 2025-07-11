@@ -63,7 +63,7 @@ jobs:
 
       - name: Terragrunt plan
         id: tg_plan
-        uses: gruntwork-io/terragrunt-action@v2
+        uses: gruntwork-io/terragrunt-action@v3
         env:
           TF_PLUGIN_CACHE_DIR: ${{ env.TF_PLUGIN_CACHE_DIR }}
         with:
