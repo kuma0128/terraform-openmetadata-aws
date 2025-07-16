@@ -1,0 +1,35 @@
+name: tfsec
+
+on:
+  pull_request:
+    branches: [ "main" ]
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+env:
+  tfsec_version: v1.28.14
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tfsec:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      name: Checkout source code
+
+    - name: tfsec
+      uses: aquasecurity/tfsec-action@v1.0.3
+      with:
+        version: ${{ env.tfsec_version }}
+        working_directory: infra/terragrunt/modules
+        additional_args: --force-all-dirs
+
