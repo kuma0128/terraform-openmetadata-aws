@@ -56,7 +56,7 @@ jobs:
           key: ${{ runner.os }}-terraform-plugin-cache-${{ hashFiles('**/*.tf', '**/*.hcl') }}
 
       - name: Terragrunt apply
-        uses: gruntwork-io/terragrunt-action@v2
+        uses: gruntwork-io/terragrunt-action@v3
         env:
           TF_PLUGIN_CACHE_DIR: ${{ env.TF_PLUGIN_CACHE_DIR }}
         with:
