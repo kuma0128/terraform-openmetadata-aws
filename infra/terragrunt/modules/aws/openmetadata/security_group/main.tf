@@ -1,5 +1,6 @@
 resource "aws_security_group" "aurora_sg" {
   vpc_id = var.vpc_id
+  description = "Security group for Aurora database"
 
   ingress {
     from_port       = 5432
@@ -24,7 +25,7 @@ resource "aws_security_group" "aurora_sg" {
 
 resource "aws_security_group" "ecs_sg" {
   vpc_id = var.vpc_id
-
+  description = "Security group for ECS tasks"
   ingress {
     from_port       = 8585
     to_port         = 8585
@@ -48,6 +49,7 @@ resource "aws_security_group" "ecs_sg" {
 
 resource "aws_security_group" "alb_sg" {
   vpc_id = var.vpc_id
+  description = "Security group for Application Load Balancer"
 
   ingress {
     from_port       = 443

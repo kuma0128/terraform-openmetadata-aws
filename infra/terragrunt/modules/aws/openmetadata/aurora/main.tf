@@ -44,14 +44,16 @@ resource "aws_rds_cluster" "aurora" {
 }
 
 resource "aws_rds_cluster_instance" "aurora_instance" {
-  count                        = var.instance_count
-  identifier                   = "${var.name_prefix}-aurora-${var.region_short_name}-instance-${count.index}"
-  cluster_identifier           = aws_rds_cluster.aurora.id
-  instance_class               = "db.serverless"
-  engine                       = aws_rds_cluster.aurora.engine
-  engine_version               = aws_rds_cluster.aurora.engine_version
-  auto_minor_version_upgrade   = true
-  publicly_accessible          = false
-  preferred_maintenance_window = "sun:09:00-sun:09:30"
-  db_subnet_group_name         = aws_rds_cluster.aurora.db_subnet_group_name
+  count                                 = var.instance_count
+  identifier                            = "${var.name_prefix}-aurora-${var.region_short_name}-instance-${count.index}"
+  cluster_identifier                    = aws_rds_cluster.aurora.id
+  instance_class                        = "db.serverless"
+  engine                                = aws_rds_cluster.aurora.engine
+  engine_version                        = aws_rds_cluster.aurora.engine_version
+  auto_minor_version_upgrade            = true
+  publicly_accessible                   = false
+  performance_insights_enabled          = true
+  performance_insights_retention_period = 7
+  preferred_maintenance_window          = "sun:09:00-sun:09:30"
+  db_subnet_group_name                  = aws_rds_cluster.aurora.db_subnet_group_name
 }

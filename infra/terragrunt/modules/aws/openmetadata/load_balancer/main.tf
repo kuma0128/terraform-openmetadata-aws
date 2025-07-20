@@ -3,10 +3,13 @@ resource "aws_lb" "this" {
   load_balancer_type         = "application"
   drop_invalid_header_fields = true
   security_groups            = [var.openmetadata_lb_security_group_id]
+  
   subnets = [
     var.subnet_a_public_id,
     var.subnet_c_public_id
   ]
+
+  internal = true
 }
 
 resource "aws_lb_target_group" "to_openmetadata" {
