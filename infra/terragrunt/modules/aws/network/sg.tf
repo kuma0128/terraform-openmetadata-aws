@@ -13,10 +13,11 @@ resource "aws_security_group" "self_reference" {
   description = "self-reference"
 
   ingress {
-    from_port = 0
-    to_port   = 0
-    protocol  = "-1"
-    self      = true
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    self        = true
+    description = "Allow all traffic from self"
   }
 
   egress {
@@ -24,6 +25,7 @@ resource "aws_security_group" "self_reference" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = [var.cidr_vpc]
+    description = "Allow all outbound traffic to self"
   }
 
   tags = {
