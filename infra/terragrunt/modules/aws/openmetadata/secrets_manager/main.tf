@@ -6,8 +6,9 @@ resource "random_password" "aurora_password" {
 
 resource "aws_secretsmanager_secret" "aurora" {
   name                    = "${var.name_prefix}-secret-${var.region_short_name}-aurora"
-  description             = ""
+  description             = "Credentials for Aurora database"
   recovery_window_in_days = 30
+  kms_key_id              = var.aurora_kms_key_id
 
   tags = {
     Name = "${var.name_prefix}-secret-${var.region_short_name}-aurora"
@@ -47,6 +48,7 @@ resource "aws_secretsmanager_secret" "openmetadata" {
   name                    = "${var.name_prefix}-secret-${var.region_short_name}-openmetadata"
   description             = "List of initial user passwords required when building OpenMetadata"
   recovery_window_in_days = 30
+  kms_key_id              = var.aurora_kms_key_id
 
   tags = {
     Name = "${var.name_prefix}-secret-${var.region_short_name}-openmetadata"

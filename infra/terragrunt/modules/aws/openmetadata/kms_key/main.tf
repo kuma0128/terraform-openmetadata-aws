@@ -42,3 +42,19 @@ resource "aws_kms_alias" "s3" {
   name          = "alias/${var.name_prefix}-kms-${var.region_short_name}-s3-envfile"
   target_key_id = aws_kms_key.s3.key_id
 }
+
+resource "aws_kms_key" "cloudwatch" {
+  description = "For CloudWatch Logs"
+  deletion_window_in_days = 7
+  enable_key_rotation     = true
+  rotation_period_in_days = 365
+
+  tags = {
+    name = "${var.name_prefix}-kms-${var.region_short_name}-cloudwatch"
+  }
+}
+
+resource "aws_kms_alias" "cloudwatch" {
+  name          = "alias/${var.name_prefix}-kms-${var.region_short_name}-cloudwatch"
+  target_key_id = aws_kms_key.cloudwatch.key_id
+}

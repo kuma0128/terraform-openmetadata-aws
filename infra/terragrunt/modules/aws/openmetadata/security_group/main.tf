@@ -6,6 +6,7 @@ resource "aws_security_group" "aurora_sg" {
     to_port         = 5432
     protocol        = "tcp"
     security_groups = [aws_security_group.ecs_sg.id]
+    description     = "Allow traffic from ECS security group"
   }
 
   egress {
@@ -13,6 +14,7 @@ resource "aws_security_group" "aurora_sg" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow all outbound traffic"
   }
 
   tags = {
@@ -28,6 +30,7 @@ resource "aws_security_group" "ecs_sg" {
     to_port         = 8585
     protocol        = "tcp"
     security_groups = [aws_security_group.alb_sg.id]
+    description     = "Allow traffic from ALB to ECS"
   }
 
   egress {
@@ -35,6 +38,7 @@ resource "aws_security_group" "ecs_sg" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow all outbound traffic"
   }
 
   tags = {
@@ -50,7 +54,7 @@ resource "aws_security_group" "alb_sg" {
     to_port         = 443
     protocol        = "tcp"
     prefix_list_ids = [aws_ec2_managed_prefix_list.allowed_ip_list.id]
-    description     = ""
+    description     = "Allow HTTPS traffic from allowed IPs"
   }
 
   egress {
@@ -58,6 +62,7 @@ resource "aws_security_group" "alb_sg" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow all outbound traffic"
   }
 
   tags = {
@@ -74,7 +79,7 @@ resource "aws_ec2_managed_prefix_list" "allowed_ip_list" {
     for_each = var.allowed_ip_list
     content {
       cidr        = entry.value
-      description = ""
+      description = "Allowed IP for VPN access"
     }
   }
 }

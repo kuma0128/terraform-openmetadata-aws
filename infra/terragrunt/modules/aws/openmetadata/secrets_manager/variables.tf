@@ -7,3 +7,8 @@ variable "region_short_name" {
   type        = string
   description = "value of the region short name"
 }
+
+variable "aurora_kms_key_id" {
+  type        = string
+  description = "ID of the KMS key for Aurora"
+}
