@@ -7,11 +7,10 @@ locals {
 }
 
 terraform {
-  source = "${get_repo_root()}//infra/terragrunt/modules/cicd/iam_github_oidc"
+  source = "${get_repo_root()}//infra/terragrunt/modules/aws/openmetadata/secrets_manager"
 }
 
 inputs = {
   name_prefix       = local.env.locals.name_prefix
   region_short_name = local.env.locals.region_short_name
-  repo_full_name    = local.env.locals.repo_full_name
 }

@@ -1,31 +1,21 @@
-include {
+include "root" {
   path = find_in_parent_folders("root.hcl")
 }
 
-terraform {
-  source = "${get_repo_root()}//infra/terragrunt/live/dev/dns"
-}
-
-dependencies {
-  paths = ["../backend"]
-}
-
 locals {
-  pj_name           = "ethan"
-  env               = "dev"
-  region_short_name = "apne1"
-  domain_name       = "ethan-example.com"
-  log_retention_in_days = 30
-  dev_ns_records    = []
-  stg_ns_records    = []
+  env = read_terragrunt_config(find_in_parent_folders("env.hcl"))
+}
+
+terraform {
+  source = "${get_repo_root()}//infra/terragrunt/modules/aws/dns"
 }
 
 inputs = {
-  pj_name               = local.pj_name
-  env                   = local.env
-  region_short_name     = local.region_short_name
-  domain_name           = local.domain_name
-  log_retention_in_days = local.log_retention_in_days
-  dev_ns_records        = local.dev_ns_records
-  stg_ns_records        = local.stg_ns_records
+  name_prefix           = local.env.locals.name_prefix
+  region_short_name     = local.env.locals.region_short_name
+  env                   = local.env.locals.env
+  domain_name           = local.env.locals.domain_name
+  log_retention_in_days = local.env.locals.log_retention_in_days
+  dev_ns_records        = local.env.locals.dev_ns_records
+  stg_ns_records        = local.env.locals.stg_ns_records
 }

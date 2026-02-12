@@ -119,8 +119,3 @@ variable "openmetadata_airflow_log_group_name" {
   type        = string
   description = "value of the openmetadata airflow log group name"
 }
-
-variable "ecr_depends_on" {
-  type        = string
-  description = "value of the ecr depends on for the ecs"
-}

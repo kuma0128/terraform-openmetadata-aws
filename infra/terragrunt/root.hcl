@@ -7,7 +7,7 @@ remote_state {
   backend = "s3"
   config = {
     bucket  = local.state_bucket
-    key     = "ethan/${replace(path_relative_to_include(), "live/", "")}/remote.tfstate"
+    key     = "ethan/${path_relative_to_include()}/remote.tfstate"
     region  = local.aws_region
     encrypt = true
   }
@@ -21,7 +21,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 6.0.0"
+      version = "~> 6.32.0"
     }
     http = {
       source  = "hashicorp/http"
@@ -29,10 +29,10 @@ terraform {
     }
     random = {
       source  = "hashicorp/random"
-      version = "~> 3.7.2"
+      version = "~> 3.8.1"
     }
   }
-  required_version = "~> 1.12.2"
+  required_version = "~> 1.14.5"
 }
 
 provider "aws" {}

@@ -289,6 +289,4 @@ resource "aws_ecs_service" "this" {
     container_name   = "openmetadata_server"
     container_port   = 8585
   }
-
-  depends_on = [var.ecr_depends_on]
 }
