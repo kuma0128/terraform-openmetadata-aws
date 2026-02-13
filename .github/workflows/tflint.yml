@@ -26,7 +26,7 @@ jobs:
     - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v4
       name: Checkout source code
 
-    - uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
+    - uses: actions/cache@b7e8d49f17405cc70c1c120101943203c98d3a4b # v4
       name: Cache plugin dir
       with:
         path: ~/.tflint.d/plugins
