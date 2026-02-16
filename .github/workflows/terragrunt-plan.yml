@@ -84,7 +84,7 @@ jobs:
       - name: Upload plan log artifact
         id: upload_plan_log
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: terragrunt-plan-${{ env.deploy_env }}-${{ github.sha }}
           path: terragrunt-plan.log
